@@ -1,6 +1,11 @@
 /* Build system Processing */
 
-String files[] = {"1.mp4", "17.mp4", "10.mp4"};
+//String files[] = {"1.mp4", "17.mp4", "10.mp4"};
+//String files[] = {"1.mp4", "17.mp4", "9.mp4"};
+//String files[] = {"17.mp4", "1.mp4", "15.mp4"};
+//String files[] = {"12.mp4", "18.mp4", "4.mp4"};
+//String files[] = {"2.mp4", "5.mp4", "8.mp4"};
+String files[] = {"1.mp4"};
 int playlistCount = files.length;
 int playlistIndex = 0;
 
@@ -44,7 +49,7 @@ void setup() {
 void draw() {
 	background(0);
 	sortCrop.draw();
-	tint(225, 230);
+	tint(225, int(random(200, 235)));
 	drawVideo();
 }
 
@@ -73,7 +78,7 @@ void drawVideo() {
 	if (frameCount % 25 == 0) {
 		blendIndex = int(random(0, blendStyle.length - 1));
 	}
-	println("nextMovie1: "+getNextMovieIndex(1) + "nextMovie2: " + getNextMovieIndex(2));
+	println("nextMovie1: " + getNextMovieIndex(1) + ", nextMovie2: " + getNextMovieIndex(2));
 	blend(movielist[getNextMovieIndex(1)], 0, 0, width, height, 0, 0, width, height, blendStyle[blendIndex]);
 	
 	tint(255, int(random(235, 255)));
