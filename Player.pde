@@ -36,8 +36,7 @@ class Player {
 	};
 
 	Player(PApplet applet, String path, int frame) {
-		speed = 1;
-		style = new int[]{GRAY, OPAQUE, INVERT, ERODE, DILATE};
+		style = new int[]{GRAY, OPAQUE, INVERT, ERODE};
 		styleIndex = 0;
 		blurIndex = int(random(2, 10));
 
@@ -54,25 +53,14 @@ class Player {
 			println("styleIndex: "+styleIndex);
 		}
 		
-		if (iframe % 10 == 0 ||
-	        iframe % 11 == 0 ||
-	        iframe % 13 == 0 ||
-	        iframe % 12 == 0 ||
-	        iframe % 16 == 0 ||
-	        iframe % 17 == 0
-		   ) {
-
+		if (iframe > 11 && iframe < 22) {
 			filter( POSTERIZE, int(random(2, 16)) );
-
+		} else if (iframe > 55 && iframe < 66) {
+			filter(THRESHOLD, random(0.25, 0.75));
 		}
-
+		//filter( BLUR, blurIndex );
 		filter( style[ styleIndex ] );
 		
-		if (iframe > 55 && iframe < 66) {
-			//filter(BLUR, blurIndex);
-		}
-		
-		movie.speed(speed);
 	}
 
 	void mousePressed() {

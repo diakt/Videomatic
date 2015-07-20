@@ -16,13 +16,13 @@ class SortSpiral {
 		ratio = 0;
 	}
 
-	void reSort() {
+	void draw() {
 		ratio = int(random(1, 10));
 		
 		if (ratio % 2 == 1) {
-			iter = 2;
+			iter = 8;
 		} else {
-			iter = 4;
+			iter = int(random(12, 24));
 		}
 
 		loadPixels();

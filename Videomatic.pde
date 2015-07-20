@@ -1,107 +1,111 @@
+/* Build system Processing */
 
-String videoSrc = "0.mp4";
+String files[] = {"1.mp4", "17.mp4", "10.mp4"};
+int playlistCount = files.length;
+int playlistIndex = 0;
 
-Player ya;
-Player yaTrans;
+Player[] playlist = new Player[playlistCount];
+Movie[] movielist = new Movie[playlistCount];
 
-Movie yaMovie;
-Movie yaTransMovie;
+boolean frameChange = true;
+
+SortCrop sortCrop;
+PImage cropImage;
 
 SortSpiral sortSpiral;
 SortRes sortRes;
 SortAerial sortAerial;
 SortByHighestRGBValue sortByHighestRGBValue;
 
-PImage tempImg;
-boolean tempImgShot = false;
+int blendStyle[] = new int[] {
+	ADD, 
+	SUBTRACT, 
+	LIGHTEST, 
+	DARKEST, 
+	DIFFERENCE, 
+	MULTIPLY, 
+	SCREEN, 
+	OVERLAY, 
+	HARD_LIGHT, 
+	SOFT_LIGHT, 
+	DODGE, 
+	BURN
+};
 
-int blendStyle[];
-int blendIndex;
+int blendIndex = 0;
 
 void setup() {
-	size(1280, 760, P3D);
+	size(1280, 720);
 	setupVideo();
+	cropImage = loadImage("1.JPG");
+	sortCrop = new SortCrop(cropImage);
 }
-
-int inc = 3;
 
 void draw() {
 	background(0);
+	sortCrop.draw();
+	tint(225, 230);
 	drawVideo();
-	int w = width;
-	int h = height;
-	// loadSphere(w/2, h/2, 0, 50 + inc*2);
-	// loadSphere(w/2 - w/4 - inc*2, h/2, 0, 50);
-	// loadSphere(w/2 + w/4 + inc*2, h/2, 0, 50);
-	// loadSphere(w/2, h/2 - h/4 - inc*2, 0, 50);
-	// loadSphere(w/2, h/2 + h/4 + inc*2, 0, 50);
-}
-
-void loadSphere(int x, int y, int z, int r) {
-	pushMatrix();
-	if (++inc == 90)
-		inc = 3;
-	sphereDetail(inc);
-	translate(x, y, z);
-	noFill();
-	stroke(255);
-	sphere(r);
-	popMatrix();
 }
 
 void setupVideo() {
 	smooth();
     frameRate( 24 );
 
-	ya = new Player(this, videoSrc, 150);
-	yaMovie = ya.getMovie();
-	yaMovie.loop();
+    // init players
+    for (int i = 0; i < playlistCount; i++) {
+    	println("new Player: " + (files[i]));
+    	playlist[i] = new Player(this, (files[i]), 10);
+    	movielist[i] = playlist[i].getMovie();
+    	
+    	movielist[i].loop();
+    	movielist[i].speed(0.5);
+    	movielist[i].volume(0);
+    }
 
-	yaTrans = new Player(this, videoSrc, 150);
-	yaTransMovie = yaTrans.getMovie();
-	yaTransMovie.loop();
-	
 	sortSpiral = new SortSpiral();
 	sortByHighestRGBValue = new SortByHighestRGBValue(); 
-	
-	blendIndex = 5;
-	blendStyle = new int[] {
-		ADD, 
-		SUBTRACT, 
-		LIGHTEST, 
-		DARKEST, 
-		DIFFERENCE, 
-		MULTIPLY, 
-		SCREEN, 
-		OVERLAY, 
-		HARD_LIGHT, 
-		SOFT_LIGHT, 
-		DODGE, 
-		BURN
-	};
 }
 
 void drawVideo() {
-	ya.draw();
-
-	if (frameCount % 15 == 0) {
-		blendIndex = int(random(0, 11));
+	playlist[playlistIndex].draw();
+	
+	if (frameCount % 25 == 0) {
+		blendIndex = int(random(0, blendStyle.length - 1));
 	}
+	println("nextMovie1: "+getNextMovieIndex(1) + "nextMovie2: " + getNextMovieIndex(2));
+	blend(movielist[getNextMovieIndex(1)], 0, 0, width, height, 0, 0, width, height, blendStyle[blendIndex]);
+	
+	tint(255, int(random(235, 255)));
+	sortSpiral.draw();
+	blend(movielist[getNextMovieIndex(2)], 0, 0, width, height, 0, 0, width, height, blendStyle[getBlendIndex(1)]);
+}
 
-	blend(yaTransMovie, 0, 0, width, height, 0, 0, width, height, blendStyle[blendIndex]);
+int getNextMovieIndex(int offset) {
+	int nextlistIndex = playlistIndex + offset;	
+	if (nextlistIndex >= playlistCount) {
+		nextlistIndex = 0;
+	}
+	return nextlistIndex;
+}
+
+int getBlendIndex(int offset) {
+	int nextBlendIndex = blendIndex + offset;
+	if (nextBlendIndex >= blendStyle.length - 1) {
+		nextBlendIndex = blendIndex - 1;
+	}
+	return nextBlendIndex;
 }
 
 void mousePressed() {
-	ya.mousePressed();
+	playlistIndex = getNextMovieIndex(1);
+	println("mousePressed");
 }
 
 void movieEvent(Movie movie) {
-	if (movie == yaMovie) {
-		yaMovie.read();	
-		if (tempImgShot == true) {
-			tempImg = movie;
+	for (int i = 0; i < playlistCount; i++) {
+		if (movie == movielist[i]) {
+			movielist[i].read();
 		}
-	} else if (movie == yaTransMovie) {
-		yaTransMovie.read();
 	}
 }
