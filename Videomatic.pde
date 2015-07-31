@@ -1,13 +1,17 @@
 /* Build system Processing */
 
-boolean saveIt = true;
+boolean saveIt = false;
 
 // 1665 frames ~ 2 mins ~ 3Gb ~ 29min render after rec
 int minutes = 1;
 //String files[] = {"02.mp4", "13.mp4", "01.mp4"};
-String files[] = {"01.mp4", "13.mp4", "02.mp4"};
+String files[] = {"1.mp4", "2.mp4", "3.mp4"};
+// String files[] = {"1.mp4"};
 int playlistCount = files.length;
 int playlistIndex = 0;
+
+int firstFrame = 843;
+int jumpFrame = 55;
 
 Player[] playlist = new Player[playlistCount];
 Movie[] movielist = new Movie[playlistCount];
@@ -55,16 +59,20 @@ void draw() {
 
 void setupVideo() {
 	smooth();
-    frameRate( 12 );
+    frameRate( 16 );
 
     // init players
     for (int i = 0; i < playlistCount; i++) {
     	println("new Player: " + (files[i]));
     	playlist[i] = new Player(this, (files[i]), 10);
     	movielist[i] = playlist[i].getMovie();
-    	
+
     	movielist[i].loop();
     	movielist[i].speed(0.125);
+    	movielist[i].jump(jumpFrame);
+    	if (!movielist[i].available()){
+    		movielist[i].jump(1);
+    	}
     	movielist[i].volume(0);
     }
 
@@ -85,13 +93,13 @@ void drawVideo() {
 	println("nextMovie1: " + getNextMovieIndex(1) + ", nextMovie2: " + getNextMovieIndex(2));
 	blend(movielist[getNextMovieIndex(1)], 0, 0, width, height, 0, 0, width, height, blendStyle[blendIndex]);
 	
-	tint(255, int(random(205, 235)));
+	//tint(255, int(random(205, 235)));
 	sortSpiral.draw();
-	blend(movielist[getNextMovieIndex(2)], 0, 0, width, height, 0, 0, width, height, blendStyle[getBlendIndex(2)]);
+	//blend(movielist[getNextMovieIndex(2)], 0, 0, width, height, 0, 0, width, height, blendStyle[getBlendIndex(2)]);
 
   // save if specified
   if (saveIt) {   
-    save("frames/vtol_" + nf(frameCount,4) + ".png");
+    save("frames/vtol_" + nf(frameCount + firstFrame,4) + ".png");
   } else {
   	//exit();
   }
@@ -122,6 +130,7 @@ void movieEvent(Movie movie) {
 	for (int i = 0; i < playlistCount; i++) {
 		if (movie == movielist[i]) {
 			movielist[i].read();
+			
 		}
 	}
 }
