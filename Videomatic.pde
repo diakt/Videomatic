@@ -1,11 +1,11 @@
 /* Build system Processing */
 
-//String files[] = {"1.mp4", "17.mp4", "10.mp4"};
-//String files[] = {"1.mp4", "17.mp4", "9.mp4"};
-//String files[] = {"17.mp4", "1.mp4", "15.mp4"};
-//String files[] = {"12.mp4", "18.mp4", "4.mp4"};
-//String files[] = {"2.mp4", "5.mp4", "8.mp4"};
-String files[] = {"1.mp4"};
+boolean saveIt = true;
+
+// 1665 frames ~ 2 mins ~ 3Gb ~ 29min render after rec
+int minutes = 1;
+//String files[] = {"02.mp4", "13.mp4", "01.mp4"};
+String files[] = {"01.mp4", "13.mp4", "02.mp4"};
 int playlistCount = files.length;
 int playlistIndex = 0;
 
@@ -42,7 +42,7 @@ int blendIndex = 0;
 void setup() {
 	size(1280, 720);
 	setupVideo();
-	cropImage = loadImage("1.JPG");
+	cropImage = loadImage("02.JPG");
 	sortCrop = new SortCrop(cropImage);
 }
 
@@ -55,7 +55,7 @@ void draw() {
 
 void setupVideo() {
 	smooth();
-    frameRate( 24 );
+    frameRate( 12 );
 
     // init players
     for (int i = 0; i < playlistCount; i++) {
@@ -64,7 +64,7 @@ void setupVideo() {
     	movielist[i] = playlist[i].getMovie();
     	
     	movielist[i].loop();
-    	movielist[i].speed(0.5);
+    	movielist[i].speed(0.125);
     	movielist[i].volume(0);
     }
 
@@ -75,15 +75,26 @@ void setupVideo() {
 void drawVideo() {
 	playlist[playlistIndex].draw();
 	
-	if (frameCount % 25 == 0) {
+	if (frameCount % 100 == 0) {
 		blendIndex = int(random(0, blendStyle.length - 1));
+	}
+
+	if (frameCount % 183 == 0 || frameCount % 373 == 0 || frameCount % 551 == 0 || frameCount % 703 == 0) {
+		playlistIndex = getNextMovieIndex(1);
 	}
 	println("nextMovie1: " + getNextMovieIndex(1) + ", nextMovie2: " + getNextMovieIndex(2));
 	blend(movielist[getNextMovieIndex(1)], 0, 0, width, height, 0, 0, width, height, blendStyle[blendIndex]);
 	
-	tint(255, int(random(235, 255)));
+	tint(255, int(random(205, 235)));
 	sortSpiral.draw();
-	blend(movielist[getNextMovieIndex(2)], 0, 0, width, height, 0, 0, width, height, blendStyle[getBlendIndex(1)]);
+	blend(movielist[getNextMovieIndex(2)], 0, 0, width, height, 0, 0, width, height, blendStyle[getBlendIndex(2)]);
+
+  // save if specified
+  if (saveIt) {   
+    save("frames/vtol_" + nf(frameCount,4) + ".png");
+  } else {
+  	//exit();
+  }
 }
 
 int getNextMovieIndex(int offset) {

@@ -46,10 +46,10 @@ class Player {
 
 	void draw() {
 		image(movie, 0, 0, width, height);
-		iframe = frameCount % 100;
+		iframe = int(frameCount/2) % 100;
 		
-		if (frameCount % 20 == 0 ) {
-			styleIndex = int(random(0, 4));
+		if (iframe % 20 == 0 ) {
+			styleIndex = int(random(0, style.length - 1));
 			println("styleIndex: "+styleIndex);
 		}
 		
@@ -59,6 +59,7 @@ class Player {
 			filter(THRESHOLD, random(0.25, 0.75));
 		}
 		//filter( BLUR, blurIndex );
+		
 		filter( style[ styleIndex ] );
 		
 	}
