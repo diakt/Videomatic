@@ -58,15 +58,9 @@ class Player {
 		} else if (iframe > 55 && iframe < 66) {
 			filter(THRESHOLD, random(0.25, 0.75));
 		}
-		//filter( BLUR, blurIndex );
-		
+		filter( BLUR, blurIndex );		
 		filter( style[ styleIndex ] );
 		
-	}
-
-	void mousePressed() {
-		//speed = map( mouseX, 0, width, -2, 2 );
-		//movie.speed(speed);
 	}
 
 	Movie getMovie() {

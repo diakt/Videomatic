@@ -1,5 +1,7 @@
 /* Build system Processing */
 
+// Depends on processing.video library
+
 boolean saveIt = false;
 
 // 1665 frames ~ 2 mins ~ 3Gb ~ 29min render after rec
@@ -44,9 +46,9 @@ int blendStyle[] = new int[] {
 int blendIndex = 0;
 
 void setup() {
-	size(1280, 720);
+	size(480, 320);
 	setupVideo();
-	cropImage = loadImage("02.JPG");
+	cropImage = loadImage("back.jpg");
 	sortCrop = new SortCrop(cropImage);
 }
 
@@ -93,13 +95,14 @@ void drawVideo() {
 	println("nextMovie1: " + getNextMovieIndex(1) + ", nextMovie2: " + getNextMovieIndex(2));
 	blend(movielist[getNextMovieIndex(1)], 0, 0, width, height, 0, 0, width, height, blendStyle[blendIndex]);
 	
-	//tint(255, int(random(205, 235)));
+	
 	sortSpiral.draw();
 	//blend(movielist[getNextMovieIndex(2)], 0, 0, width, height, 0, 0, width, height, blendStyle[getBlendIndex(2)]);
-
+	tint(255, int(random(205, 235)));
+	// sortByHighestRGBValue.reSort();
   // save if specified
   if (saveIt) {   
-    save("frames/vtol_" + nf(frameCount + firstFrame,4) + ".png");
+    save("frames/frame_" + nf(frameCount + firstFrame,4) + ".png");
   } else {
   	//exit();
   }

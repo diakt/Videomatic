@@ -170,6 +170,4 @@ class SortByHighestRGBValue {
 		s = s.substring(0, s.lastIndexOf('.'));
 		return s;
 	}
-
-
 }

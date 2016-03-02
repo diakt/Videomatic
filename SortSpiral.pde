@@ -1,9 +1,7 @@
 
 /*
 SORTING SPIRAL
-updated by Dmitry Ryzhov
-Jeff Thompson | 2012 | www.jeffreythompson.org
-
+inspired by Jeff Thompson | 2012 | www.jeffreythompson.org
 */
 class SortSpiral {
 

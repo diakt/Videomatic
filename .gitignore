@@ -1,18 +1,6 @@
-# Media stuff #
-###################
-*.mp4
-*.avi
-*.mov
-*.wav
-*.aif
-*.aiff
-*.flac
-*.alac
-
 # generated and source processing stuff
 frames/
 images/
-data/
 build-tmp/
 
 # Compiled source #
