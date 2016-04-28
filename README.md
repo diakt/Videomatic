@@ -1,5 +1,4 @@
-###Видео со спецэффектами###
+### Video running with random FX and some vendor sorting algorythms ###
 
-1. Создать директорию Videomatic
-2. в корень Videomatic поместить .git
-3. Запустить через PDE или Build system
+__processing.video is required__
+
